@@ -41,8 +41,8 @@ guild.defaultChannel.sendMessage(`${member.user.username} left ${guild.name}`);
 //SET STATUS
 bot.on("guildCreate", (guild) => {
 thestats[guild.id] = {
-						name: guild.name,
-						id: guild.id,
+			name: guild.name,
+			id: guild.id,
                         status: "undefined"
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
@@ -65,8 +65,8 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
                 return msg.channel.sendMessage("Invalid function!");
             if (suffix === "on") {
         thestats[msg.guild.id] = {
-						name: msg.guild.name,
-						id: msg.guild.id,
+			name: msg.guild.name,
+			id: msg.guild.id,
                         status: "online"
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
@@ -76,8 +76,8 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
             } else 
                 if (suffix === "off") {
                     thestats[msg.guild.id] = {
-						name: msg.guild.name,
-						id: msg.guild.id,
+			name: msg.guild.name,
+			id: msg.guild.id,
                         status: "offline"
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
@@ -87,8 +87,8 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
             } else
                  if (suffix === "indev") {
                 thestats[msg.guild.id] = {
-						name: msg.guild.name,
-						id: msg.guild.id,
+			name: msg.guild.name,
+			id: msg.guild.id,
                         status: "in development"
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
@@ -135,19 +135,20 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
            "\n**uptime**: Shows bot uptime." + 
            "\n**invite**: Invite the bot to your server." + 
            "\n**makerole**: Creates a role." + 
-		   "\n**wiki**: Search anything using wiki." + 
-		   "\n**logservers**: See how many servers do you have in your logchannel." + 
-		   "\n**pfp**: See someones profile picture." + 
-		   "\n**id**: See someones id" +
-		    "\n**match**: See your love metre." + 
-		   "\n**clone**: Make the bot clone someone." + 
-		    "\n**wiki**: Search anything using wiki." + 
-		"\n**create**: Create a channel." + 
-		 "\n**delete**: Delete a channel." + 
-			 "\n**topic**: Set a topic for your channel." +
-			 "\nMore commands are being added!" +
-			 "\n**youtube**: Searches your favourite video." +
-			 "\n**roll**: Roll your lucky number." 
+	   "\n**wiki**: Search anything using wiki." + 
+	   "\n**logservers**: See how many servers do you have in your logchannel." + 
+	   "\n**pfp**: See someones profile picture." + 
+	   "\n**id**: See someones id" +
+	   "\n**match**: See your love metre." + 
+	   "\n**clone**: Make the bot clone someone." + 
+	   "\n**wiki**: Search anything using wiki." + 
+	   "\n**create**: Create a channel." + 
+	   "\n**delete**: Delete a channel." + 
+	   "\n**topic**: Set a topic for your channel." +
+	   "\nMore commands are being added!" +
+	   "\n**youtube**: Searches your favourite video." +
+	   "\n**roll**: Roll your lucky number." +
+	   "\n**userinfo**: Gives user information."
                                ])
    }
  //NICKNAME
@@ -502,7 +503,6 @@ msg.channel.sendMessage(suffix,{tts:true});
 msg.channel.sendMessage("Invalid permissions! Only the server owner can do this!")
 }		
 }
-//USERINFO
 	//USERINFO
     if (msg.content.startsWith(prefix + "userinfo")) {
         var ui = msg.mentions.users.first();
