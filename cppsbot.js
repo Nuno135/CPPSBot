@@ -30,9 +30,7 @@ bot.on('ready', function () {
 bot.on("guildMemberAdd", (guild, member) => {
 guild.defaultChannel.sendMessage(`${member.user.username} joined ${guild.name}`);
 var mb = guild.roles.find("name", "member"); 
-member.addRole(mb)	
-var mbs = guild.roles.find("name", "members"); 
-member.addRole(mbs)	
+member.addRole(mb)		
 guild.defaultChannel.sendMessage(`${member.user.username} has been automaticly promoted to member`);
 });
 
