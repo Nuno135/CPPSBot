@@ -8,7 +8,6 @@ var isDev = ['178797192763408386', '172711836557377536']; //Nuno and Dev321
 var isStaff = ['178797192763408386', '172711836557377536', '201361039336407050'];//Nuno, Dev321, Hess
 var thestats = require('./status.json');
 var fs = require('fs');
-var afk = require('./afk.json');
 var d20 = require("d20");
 
 
