@@ -112,7 +112,7 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
     }
 //COMMANDS
    if (msg.content === prefix + "help") {
-       msg.channel.sendMessage([
+       msg.author.sendMessage([
            "Hello, I am " + bot.user.username + ". I was created by **Dev321** and **Nuno**. My current commands are: " + 
            "\n**setname**: Sets my username." + 
            "\n**say**: Sends a message that you wrote." + 
@@ -494,7 +494,7 @@ if (msg.content.startsWith(prefix + "roll")) {
                 }
             }
         }
-		
+	//ANNOUNCE	
 if (msg.content.startsWith(prefix + "announce")) {
 if (msg.author.id === msg.guild.owner.user.id) {
 msg.channel.sendMessage(suffix,{tts:true});
@@ -502,7 +502,24 @@ msg.channel.sendMessage(suffix,{tts:true});
 msg.channel.sendMessage("Invalid permissions! Only the server owner can do this!")
 }		
 }
-
+//USERINFO
+	//USERINFO
+    if (msg.content.startsWith(prefix + "userinfo")) {
+        var ui = msg.mentions.users.first();
+        if (!ui) {
+msg.channel.sendMessage([
+    "Username: " + msg.author.id + "#" + msg.author.discriminator + 
+    "\nID: " + msg.author.id + 
+    "\nBot?: " + msg.author.bot
+])
+        } else {
+            msg.channel.sendMessage([
+            "Username: " + ui.username + "#" + ui.discriminator + 
+                "\nID: " + ui.id + 
+                "\nBot?: " + ui.bot
+                ])
+        }
+    }
 });
 
 
