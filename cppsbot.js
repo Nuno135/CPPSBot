@@ -507,4 +507,4 @@ msg.channel.sendMessage("Invalid permissions! Only the server owner can do this!
 
 
     
-bot.login("MjM3MTcwNDk3OTM3MzQyNDY1.CuT1Jw.8I8JPUpCty6IsNxAO6n4vViYBGY");
+bot.login("token");
