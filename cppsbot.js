@@ -1,4 +1,4 @@
-var Discord = require("discord.js");
+var Discord = require("./djs11");
 const bot = new Discord.Client()
 var prefix = "!";
 var Cleverbot = require('cleverbot-node');
@@ -27,15 +27,15 @@ bot.on('ready', function () {
 
 //HELLO MSG
 bot.on("guildMemberAdd", (guild, member) => {
-guild.defaultChannel.sendMessage(`${member.user.username} joined ${guild.name}`);
-var mb = guild.roles.find("name", "member"); 
-member.addRole(mb)		
-guild.defaultChannel.sendMessage(`${member.user.username} has been automaticly promoted to member`);
+guild.defaultChannel.send(`${member.user.username} joined ${guild.name}`);
+var mb = guild.roles.find("name", "member");
+member.addRole(mb)
+guild.defaultChannel.send(`${member.user.username} has been automaticly promoted to member`);
 });
 
 //BYE MSG
 bot.on("guildMemberRemove", (guild, member) => {
-guild.defaultChannel.sendMessage(`${member.user.username} left ${guild.name}`);
+guild.defaultChannel.send(`${member.user.username} left ${guild.name}`);
 });
 
 //SET STATUS
@@ -47,22 +47,22 @@ thestats[guild.id] = {
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
 						if (err) return;
-						guild.defaultChannel.sendMessage(`The CPPS's status is not set yet! Please set it using "!cppson", !cppsoff", or !cppsindev!`);
+						guild.defaultChannel.send(`The CPPS's status is not set yet! Please set it using "!cppson", !cppsoff", or !cppsindev!`);
 					});
 });
 bot.on("message" ,msg => {
 var suffix = msg.content.split(" ").slice(1).join(" ");
-    
+
     //USERS
     if (msg.content === prefix + "users") {
         var filusers = msg.guild.memberCount;
-        msg.channel.sendMessage(`There are ${filusers} users in this server.`)
+        msg.channel.send(`There are ${filusers} users in this server.`)
     }
     //CPPSON
     if (msg.content.startsWith(prefix + "cpps ")) {
         if (msg.author.id === msg.guild.owner.user.id || isStaff.indexOf(msg.author.id) > -1) {
             if (suffix !== "on" && suffix !== "off" && suffix !== "indev")
-                return msg.channel.sendMessage("Invalid function!");
+                return msg.channel.send("Invalid function!");
             if (suffix === "on") {
         thestats[msg.guild.id] = {
 			name: msg.guild.name,
@@ -71,9 +71,9 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
 						if (err) return;
-						msg.channel.sendMessage(`Done! ${msg.guild.name}'s status is now online!`);
+						msg.channel.send(`Done! ${msg.guild.name}'s status is now online!`);
 					});
-            } else 
+            } else
                 if (suffix === "off") {
                     thestats[msg.guild.id] = {
 			name: msg.guild.name,
@@ -82,7 +82,7 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
 						if (err) return;
-						msg.channel.sendMessage(`Done! ${msg.guild.name}'s status is now offline!`);
+						msg.channel.send(`Done! ${msg.guild.name}'s status is now offline!`);
 					});
             } else
                  if (suffix === "indev") {
@@ -93,57 +93,57 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
 					};
 					fs.writeFile('status.json', JSON.stringify(thestats, null, 4), 'utf8', function (err) {
 						if (err) return;
-						msg.channel.sendMessage(`Done! ${msg.guild.name}'s status is now in development!`);
+						msg.channel.send(`Done! ${msg.guild.name}'s status is now in development!`);
 					});
             }
         } else {
-            msg.channel.sendMessage("Invalid permissions! Only the server owner can do this!")
+            msg.channel.end("Invalid permissions! Only the server owner can do this!")
         }
     }
-    
+
     //CPPSSTATS
     if (msg.content === prefix + "cppsstats") {
         var stats = thestats[msg.guild.id].status;
         if (stats === "undefined") {
-            msg.channel.sendMessage(`The CPPS's status is not set yet! Please set it using "!cppson", !cppsoff", or !cppsindev!`)
+            msg.channel.send(`The CPPS's status is not set yet! Please set it using "!cppson", !cppsoff", or !cppsindev!`)
         } else {
-        msg.channel.sendMessage(`${msg.guild.name} is ${stats}!`)
+        msg.channel.send(`${msg.guild.name} is ${stats}!`)
         }
     }
 //COMMANDS
-   if (msg.content === prefix + "help" ||  if (msg.isMentioned(bot.user))) {
-       msg.author.sendMessage([
-           "Hello, I am " + bot.user.username + ". I was created by **Dev321** and **Nuno**. My current commands are: " + 
-           "\n**setname**: Sets my username." + 
-           "\n**say**: Sends a message that you wrote." + 
-           "\n**cppson**: Sets the CPPS status online." + 
-           "\n**cppsoff**: Sets the CPPS status offline." + 
-           "\n**cppsindev**: Sets the CPPS status in development." + 
-           "\n**setname**: Sets a bot nickname." + 
-           "\n**ping**: Returns Pong." + 
-           "\n**idle**: Sets bot status idle." + 
-           "\n**online**: Sets bot status online." + 
-           "\n**clever**: Talk with the bot." + 
-           "\n**rolemembers**: Lists the members in a role." + 
-           "\n**8ball**: Ask 8ball a question." + 
-           "\n**stats**: Shows bot stats." + 
-           "\n**gn**: Sets server name." + 
-           "\n**myperm**: Sends user perms." + 
-           "\n**create**: Creates channel." + 
-           "\n**delete**: Deletes channel." + 
-           "\n**topic**: Sets channel topic." + 
-           "\n**uptime**: Shows bot uptime." + 
-           "\n**invite**: Invite the bot to your server." + 
-           "\n**makerole**: Creates a role." + 
-	   "\n**wiki**: Search anything using wiki." + 
-	   "\n**logservers**: See how many servers do you have in your logchannel." + 
-	   "\n**pfp**: See someones profile picture." + 
+   if (msg.content === prefix + "help" || (msg.isMentioned(bot.user))) {
+       msg.author.send([
+           "Hello, I am " + bot.user.username + ". I was created by **Dev321** and **Nuno**. My current commands are: " +
+           "\n**setname**: Sets my username." +
+           "\n**say**: Sends a message that you wrote." +
+           "\n**cppson**: Sets the CPPS status online." +
+           "\n**cppsoff**: Sets the CPPS status offline." +
+           "\n**cppsindev**: Sets the CPPS status in development." +
+           "\n**setname**: Sets a bot nickname." +
+           "\n**ping**: Returns Pong." +
+           "\n**idle**: Sets bot status idle." +
+           "\n**online**: Sets bot status online." +
+           "\n**clever**: Talk with the bot." +
+           "\n**rolemembers**: Lists the members in a role." +
+           "\n**8ball**: Ask 8ball a question." +
+           "\n**stats**: Shows bot stats." +
+           "\n**gn**: Sets server name." +
+           "\n**myperm**: Sends user perms." +
+           "\n**create**: Creates channel." +
+           "\n**delete**: Deletes channel." +
+           "\n**topic**: Sets channel topic." +
+           "\n**uptime**: Shows bot uptime." +
+           "\n**invite**: Invite the bot to your server." +
+           "\n**makerole**: Creates a role." +
+	   "\n**wiki**: Search anything using wiki." +
+	   "\n**logservers**: See how many servers do you have in your logchannel." +
+	   "\n**pfp**: See someones profile picture." +
 	   "\n**id**: See someones id" +
-	   "\n**match**: See your love metre." + 
-	   "\n**clone**: Make the bot clone someone." + 
-	   "\n**wiki**: Search anything using wiki." + 
-	   "\n**create**: Create a channel." + 
-	   "\n**delete**: Delete a channel." + 
+	   "\n**match**: See your love metre." +
+	   "\n**clone**: Make the bot clone someone." +
+	   "\n**wiki**: Search anything using wiki." +
+	   "\n**create**: Create a channel." +
+	   "\n**delete**: Delete a channel." +
 	   "\n**topic**: Set a topic for your channel." +
 	   "\nMore commands are being added!" +
 	   "\n**youtube**: Searches your favourite video." +
@@ -155,15 +155,15 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
     if (msg.content.startsWith(prefix + 'setname')) {
          let args = msg.content.split(' ').slice(1).join(" ");
                     msg.guild.member(bot.user).setNickname(args).then(() => {
-                        msg.channel.sendMessage("Success!")
+                        msg.channel.send("Success!")
                     });
         }
 
 
-    
+
     //PING
     if (msg.content.startsWith(prefix + "ping")) {
-        msg.channel.sendMessage("Ping?")
+        msg.channel.send("Ping?")
             .then(message => {
         message.edit(`Pong! (took: ${message.timestamp - msg.timestamp}ms)`);
     });
@@ -171,13 +171,13 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
    //IDLE
     if (msg.content.startsWith(prefix + "idle")) {
     bot.user.setStatus("idle").then(() => {
-        msg.channel.sendMessage("Your bot is idle now.")
+        msg.channel.send("Your bot is idle now.")
     });
 }
     //ONLINE
     if (msg.content.startsWith(prefix + "online")) {
         bot.user.setStatus("online").then(() => {
-            msg.channel.sendMessage("Your bot is online now.")
+            msg.channel.send("Your bot is online now.")
         });
     }
     //CLEVERBOT
@@ -186,18 +186,18 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
 			var cleverMessage = msg.content.split(' ').splice(1).join(' ');
 			Cleverbot.prepare(function () {
 				cleverbot.write(cleverMessage, function (response) {
-					msg.channel.sendMessage(response.message);
+					msg.channel.send(response.message);
 				});
 			});
         } catch (err) {
             console.log(err)
         }
 	}
-	
+
 	//SAY
 	 if (msg.content.startsWith(prefix + "say")) {
             let args = msg.content.split(' ').slice(1).join(" ");
-                msg.channel.sendMessage(args)
+                msg.channel.send(args)
     }
 
 	//BAN
@@ -206,12 +206,12 @@ if (msg.content.startsWith(prefix + "ban")) {
         var usern = msg.mentions.users.first();
 		var days = suffix[1];
     if (days.length > 7) {
-        msg.channel.sendMessage("You can only delete up to 7 days of messages!")
+        msg.channel.send("You can only delete up to 7 days of messages!")
     }
 if (!usern) {
-    msg.channel.sendMessage("Error.")
+    msg.channel.send("Error.")
 }
-    msg.channel.sendMessage("Successfully banned **" + usern.username + usern.discriminator + "**").then (() => {
+    msg.channel.send("Successfully banned **" + usern.username + usern.discriminator + "**").then (() => {
 		msg.guild.ban(usern, days)
     });
     }
@@ -223,13 +223,13 @@ if (!usern) {
 	 let roleID = msg.guild.roles.find('name', roleName);
 	 let membersWithRole = msg.guild.members.filter(m => m.roles.has(roleID.id));
 	 let listOfMembers = membersWithRole.array().map(m => m.user.username).join(', ');
-	 msg.channel.sendMessage(`*${listOfMembers}*`);
+	 msg.channel.send(`*${listOfMembers}*`);
 	 } catch (err) {
 	   console.log(err)
 	 }
 	 }
-	 
-	 
+
+
 //UPTIME
 if (msg.content === prefix + "uptime") {
 var date = new Date(bot.uptime);
@@ -238,14 +238,14 @@ var date = new Date(bot.uptime);
             strDate += date.getUTCHours() + ' hours, ';
             strDate += date.getUTCMinutes() + ' minutes, ';
             strDate += date.getUTCSeconds() + ' seconds**';
-msg.channel.sendMessage(strDate)
+msg.channel.send(strDate)
 }
 
-//8BALL 
+//8BALL
 if (msg.content.startsWith(prefix + "8ball")) {
 var ball = ['Yes', 'No'];
-msg.channel.sendMessage(ball[~~(Math.random() * ball.length)])
-} 
+msg.channel.send(ball[~~(Math.random() * ball.length)])
+}
  //STATS
  if (msg.content === prefix + "stats") {
       let m = '';
@@ -254,25 +254,25 @@ msg.channel.sendMessage(ball[~~(Math.random() * ball.length)])
       m += `I am aware of ${bot.channels.size} channels overall\n`;
       m += `I am aware of ${bot.guilds.size} guilds overall\n`;
       m += `I am aware of ${bot.users.size} users overall\n`;
-      msg.channel.sendMessage(m)
+      msg.channel.send(m)
     }
 	//SET GUILD NAME
     if (msg.content.startsWith(prefix + 'gn')) {
       msg.guild.setName(msg.content.substr(3))
        .then(() => {
-      msg.channel.sendMessage('Guild name updated');
+      msg.channel.send('Guild name updated');
        }).catch(console.log);
 }
 //SEND USER PERMS
  if (msg.content === prefix + "myperm") {
-      msg.channel.sendMessage('Your permissions are:\n' +
+      msg.channel.send('Your permissions are:\n' +
         JSON.stringify(msg.channel.permissionsFor(msg.author).serialize(), null, 4));
 }
 //CREATE ROLE
 if (msg.content.startsWith(prefix + "makerole")) {
     var toname = msg.content.split(" ").slice(1).join(" ");
       msg.guild.createRole({name: toname}).then(role => {
-        msg.channel.sendMessage(`Made role ${role.name}`);
+        msg.channel.send(`Made role ${role.name}`);
       }).catch(console.log);
 }
 //KICK
@@ -281,81 +281,52 @@ if (msg.content.startsWith(prefix + "kick")) {
     if (tokick.id !== "172711836557377536") {
       msg.guild.member(tokick).kick().then(member => {
         console.log(member);
-        msg.channel.sendMessage('Kicked!' + member.user.username);
+        msg.channel.send('Kicked!' + member.user.username);
       }).catch(console.log);
     } else {
-        msg.channel.sendMessage("Error, you can't kick the bot owner!")
+        msg.channel.send("Error, you can't kick the bot owner!")
     }
 }
 
 if (msg.content.startsWith(prefix + "invite")) {
-msg.channel.sendMessage([
-           "Hello, I am " + bot.user.username + ". To invite me to your server please click this link. " + 
-           "https://discordapp.com/oauth2/authorize?&client_id=237170497937342465&scope=bot&permissions=8" 
-])   
+msg.channel.send([
+           "Hello, I am " + bot.user.username + ". To invite me to your server please click this link. " +
+           "https://discordapp.com/oauth2/authorize?&client_id=237170497937342465&scope=bot&permissions=8"
+])
 }
     //ID
     if (msg.content.startsWith(prefix + "id")) {
         try {
         var toid = msg.mentions.users.first();
-        msg.channel.sendMessage(toid.id)
+        msg.channel.send(toid.id)
         } catch (err) {
             console.log(err)
         }
     }
-//CLONE
-    if (msg.content.startsWith(prefix + "clone")) {
-		var toMimic = msg.mentions.users.first();
-        if (isStaff.indexOf(msg.author.id) > -1) {
-            try {
 
-		if (!toMimic) {
-			return;
-		}
-
-		if (!toMimic.avatar) {
-			bot.user.setAvatar(null);
-			return;
-		}
-
-		request
-			.get(toMimic.avatarURL)
-			.end((err, res) => {
-				bot.user.setAvatar(res.body).then(() => {
-
-					msg.reply("Done!");
-
-				});
-			});
-            } catch (err) {
-                console.log(err)
-            }
-        }
-	}
-	 
     //GIF
     if (msg.content.startsWith(prefix + "gif")) {
             var tags = suffix;
 			if (typeof id !== "undefined") {
-			    msg.channel.sendMessage( "http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
+			    msg.channel.send( "http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
 			}
 			else {
-			    msg.channel.sendMessage( "Invalid tags, try something different. [Tags: " + (tags ? tags : "Random GIF") + "]");
+			    msg.channel.send( "Invalid tags, try something different. [Tags: " + (tags ? tags : "Random GIF") + "]");
 			}
-} 
+}
     //CREATE CHANNEL
     if (msg.content.startsWith(prefix + "create")) {
         try {
         var ctoc = suffix;
         msg.guild.createChannel(ctoc, 'text').then(() => {
-           msg.channel.sendMessage("Successfully created a channel called: `" + ctoc + "`") 
+           msg.channel.send("Successfully created a channel called: `" + ctoc + "`")
         });
-    
+
     } catch (err) {
-        msg.channel.sendMessage("An error occured!")
+        msg.channel.send("An error occured!")
     }
     }
-	
+
 	//DELETE CHANNEL
 	if (msg.content.startsWith(prefix + "delete")) {
 		 var channel = bot.channels.find("id",suffix);
@@ -369,39 +340,39 @@ msg.channel.sendMessage([
 					for(var i=0;i<channels.length;i++){
 						response += channels[i] + ": " + channels[i].id;
 					}
-					msg.channel.sendMessage(response);
+					msg.channel.send(response);
 					return;
 				}else if(channels.length == 1){
 					channel = channels[0];
 				} else {
-					msg.channel.sendMessage( "Couldn't find channel to delete!");
+					msg.channel.send( "Couldn't find channel to delete!");
 					return;
 				}
 			}
-            msg.channel.guild.defaultChannel.sendMessage("deleting channel " + suffix + " at " +msg.author + "'s request");
+            msg.channel.guild.defaultChannel.send("deleting channel " + suffix + " at " +msg.author + "'s request");
             if(msg.channel.guild.defaultChannel != msg.channel){
-                msg.channel.sendMessage("deleting " + channel);
+                msg.channel.send("deleting " + channel);
             }
             channel.delete().then(function(channel){
 				console.log("deleted " + suffix + " at " + msg.author + "'s request");
             }).catch(function(error){
-				msg.channel.sendMessage("couldn't delete channel: " + error);
+				msg.channel.send("couldn't delete channel: " + error);
 			});
 }
 //SETTOPIC
 if (msg.content.startsWith(prefix + "topic")) {
- var coc = suffix;	
+ var coc = suffix;
 msg.channel.setTopic(coc);
-msg.channel.sendMessage('Topic created');
+msg.channel.send('Topic created');
 }
     //END
     if (msg.content === prefix + "end") {
         if (isStaff.indexOf(msg.author.id) > -1) {
-        msg.channel.sendMessage("Shutting down...").then(() => {
+        msg.channel.send("Shutting down...").then(() => {
         bot.destroy()
         });
         } else {
-            msg.channel.sendMessage("Invalid Permission!")
+            msg.channel.send("Invalid Permission!")
         }
     }
     //LOVECALC
@@ -410,29 +381,29 @@ msg.channel.sendMessage('Topic created');
         var rolle = Math.floor((Math.random() * 100) + 1);
 			if (isNaN(rolle)) {
 				logMsg(Date.now(), 'WARN', msg.channel.server.id, msg.channel.id, msg.author.username + ' provided nonsensical love parameter');
-				msg.channel.sendMessage(' Wut.');
+				msg.channel.send(' Wut.');
 			} else {
-				msg.channel.sendMessage(`**${msg.author.username}** & **${ou.username}** || Match: ${parseInt(rolle)}%`);
+				msg.channel.send(`**${msg.author.username}** & **${ou.username}** || Match: ${parseInt(rolle)}%`);
 			}
     }
     //LOGO
     if (msg.content.startsWith(prefix + "pfp")) {
         var userpfp = msg.mentions.users.first();
         if (!userpfp) {
-        msg.channel.sendMessage(bot.user.avatarURL)
+        msg.channel.send(bot.user.avatarURL)
         } else {
-            msg.channel.sendMessage(userpfp.avatarURL)
+            msg.channel.send(userpfp.avatarURL)
         }
     }
 //LOGSERVERS
     if (msg.content === prefix + "logservers") {
         if (isStaff.indexOf(msg.author.id) > -1) {
-        bot.channels.get('237996502742466561').sendMessage(bot.guilds.array().map(g => g.name + "[" + g.id + "]").join(", "))
+        bot.channels.get('237996502742466561').send(bot.guilds.array().map(g => g.name + "[" + g.id + "]").join(", "))
         }
-    }    
+    }
 //MEME
 if (msg.content === prefix + "randommeme") {
-var links = ([ 
+var links = ([
            "http://images-cdn.9gag.com/photo/azjbwrb_460s.jpg",
            "https://lh3.googleusercontent.com/txMDoD--7uZzZqBnh92Ngez4CNmpQClqY4KddcNc7OcF0t9Xk5CWQy5InzseMhXycg=h900",
 		   "https://s-media-cache-ak0.pinimg.com/236x/01/0b/68/010b68214bf1eeb91060732aa58bed1e.jpg",
@@ -442,7 +413,7 @@ var links = ([
 		   "https://cdn.pastemagazine.com/www/system/images/photo_albums/trump-memes/large/1fe.png?1384968217",
 		   "https://www.surf.co/images/y-tho.jpg?image=cdn",
 		   "https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg"
-])   
+])
 var item = links[~~(Math.random() * links.length)];
 msg.channel.sendFile(item)
 }
@@ -450,7 +421,7 @@ msg.channel.sendFile(item)
  if (msg.content.startsWith(prefix + "wiki")) {
 		  var query = suffix;
             if(!query) {
-                msg.channel.sendMessage("usage: " + Config.commandPrefix + "wiki search terms");
+                msg.channel.send("usage: " + Config.commandPrefix + "wiki search terms");
                 return;
             }
             var Wiki = require('wikijs');
@@ -461,14 +432,14 @@ msg.channel.sendFile(item)
                         var continuation = function() {
                             var paragraph = sumText.shift();
                             if(paragraph){
-                                msg.channel.sendMessage(paragraph,continuation);
+                                msg.channel.send(paragraph,continuation);
                             }
                         };
                         continuation();
                     });
                 });
             },function(err){
-                msg.channel.sendMessage(err);
+                msg.channel.send(err);
             });
 }
 //YOUTUBE SEARCH
@@ -478,7 +449,7 @@ youtube_plugin.respond(suffix,msg.channel,bot);
 //ROLL
 if (msg.content.startsWith(prefix + "roll")) {
  if (suffix.split("d").length <= 1) {
-                msg.channel.sendMessage(msg.author + " rolled a " + d20.roll(suffix || "10"));
+                msg.channel.send(msg.author + " rolled a " + d20.roll(suffix || "10"));
             }
             else if (suffix.split("d").length > 1) {
                 var eachDie = suffix.split("+");
@@ -489,33 +460,33 @@ if (msg.content.startsWith(prefix + "roll")) {
                     };
                 }
                 if (passing == eachDie.length) {
-                    msg.channel.sendMessage(msg.author + " rolled a " + d20.roll(suffix));
+                    msg.channel.send(msg.author + " rolled a " + d20.roll(suffix));
                 }  else {
-                    msg.channel.sendMessage(msg.author + " tried to roll too many dice at once!");
+                    msg.channel.send(msg.author + " tried to roll too many dice at once!");
                 }
             }
         }
-	//ANNOUNCE	
+	//ANNOUNCE
 if (msg.content.startsWith(prefix + "announce")) {
 if (msg.author.id === msg.guild.owner.user.id) {
-msg.channel.sendMessage(suffix,{tts:true});
+msg.channel.send(suffix,{tts:true});
  } else {
-msg.channel.sendMessage("Invalid permissions! Only the server owner can do this!")
-}		
+msg.channel.send("Invalid permissions! Only the server owner can do this!")
+}
 }
 	//USERINFO
     if (msg.content.startsWith(prefix + "userinfo")) {
         var ui = msg.mentions.users.first();
         if (!ui) {
-msg.channel.sendMessage([
-    "Username: " + msg.author.id + "#" + msg.author.discriminator + 
-    "\nID: " + msg.author.id + 
+msg.channel.send([
+    "Username: " + msg.author.id + "#" + msg.author.discriminator +
+    "\nID: " + msg.author.id +
     "\nBot?: " + msg.author.bot
 ])
         } else {
-            msg.channel.sendMessage([
-            "Username: " + ui.username + "#" + ui.discriminator + 
-                "\nID: " + ui.id + 
+            msg.channel.send([
+            "Username: " + ui.username + "#" + ui.discriminator +
+                "\nID: " + ui.id +
                 "\nBot?: " + ui.bot
                 ])
         }
@@ -523,5 +494,5 @@ msg.channel.sendMessage([
 });
 
 
-    
+
 bot.login("token");
