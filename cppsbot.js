@@ -111,7 +111,7 @@ var suffix = msg.content.split(" ").slice(1).join(" ");
         }
     }
 //COMMANDS
-   if (msg.content === prefix + "help") {
+   if (msg.content === prefix + "help" ||  if (msg.isMentioned(bot.user))) {
        msg.author.sendMessage([
            "Hello, I am " + bot.user.username + ". I was created by **Dev321** and **Nuno**. My current commands are: " + 
            "\n**setname**: Sets my username." + 
