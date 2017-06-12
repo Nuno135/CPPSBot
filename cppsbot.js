@@ -1,4 +1,4 @@
-var Discord = require("./djs11");
+var Discord = require("discord.js");
 const bot = new Discord.Client()
 var prefix = "!";
 var Cleverbot = require('cleverbot-node');
