@@ -1,24 +1,23 @@
-var Discord = require("discord.js");
+const Discord = require("discord.js");
 const bot = new Discord.Client()
-var prefix = "!";
-var Cleverbot = require('cleverbot-node');
-var request = require('superagent');
-var cleverbot = new Cleverbot;
-var isDev = ['178797192763408386', '172711836557377536']; //Nuno and Dev321
-var isStaff = ['178797192763408386', '172711836557377536', '201361039336407050'];//Nuno, Dev321, Hess
-var thestats = require('./status.json');
-var fs = require('fs');
-var d20 = require("d20");
-
-
-try {
-	var yt = require("./youtube_plugin");
-	var youtube_plugin = new yt();
-} catch(e){
-	console.log("couldn't load youtube plugin!\n"+e.stack);
-}
+const embed = new Discord.RichEmbed();
+const prefix = "!";
+const Cleverbot = require('cleverbot-node');
+const request = require('superagent');
+const cleverbot = new Cleverbot;
+const isDev = ['ID1', 'ID2']; 
+const isStaff = ['ID1', 'ID2', 'ID3'];
+const thestats = require('./status.json');
+const fs = require('fs');
+const d20 = require("d20");
+const search = require("youtube-search");
+const opts = {
+  maxResults: 1,
+  key: 'api-key'
+};
 
 bot.on('ready', function () {
+
 	console.log('Bot Online and Ready! On ' + bot.guilds.size + ' Servers!');
 	bot.user.setStatus('online', '!help | !invite');
 });
@@ -51,7 +50,7 @@ thestats[guild.id] = {
 					});
 });
 bot.on("message" ,msg => {
-var suffix = msg.content.split(" ").slice(1).join(" ");
+const suffix = msg.content.split(" ").slice(1).join(" ");
 
     //USERS
     if (msg.content === prefix + "users") {
@@ -424,9 +423,9 @@ msg.channel.sendFile(item)
                 msg.channel.send("usage: " + Config.commandPrefix + "wiki search terms");
                 return;
             }
-            var Wiki = require('wikijs');
-            new Wiki().search(query,1).then(function(data) {
-                new Wiki().page(data.results[0]).then(function(page) {
+            const wiki = require('wikijs').default;
+            wiki().search(query,1).then(function(data) {
+                wiki().page(data.results[0]).then(function(page) {
                     page.summary().then(function(summary) {
                         var sumText = summary.toString().split('\n');
                         var continuation = function() {
@@ -444,7 +443,11 @@ msg.channel.sendFile(item)
 }
 //YOUTUBE SEARCH
  if (msg.content.startsWith(prefix + "youtube")) {
-youtube_plugin.respond(suffix,msg.channel,bot);
+   search(suffix, opts, function(err, results) {
+   if(err) return console.log(err);
+   msg.channel.send(results[0].link)
+   console.dir(`YOUTUBE: Searched for: ${suffix[1]}, ${results[0].link}, ${results[0].title}`);
+ });
 }
 //ROLL
 if (msg.content.startsWith(prefix + "roll")) {
