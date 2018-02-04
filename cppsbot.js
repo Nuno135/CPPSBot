@@ -3,7 +3,6 @@ const bot = new Discord.Client()
 const embed = new Discord.RichEmbed();
 const prefix = "!";
 const Cleverbot = require('cleverbot-node');
-const request = require('superagent');
 const cleverbot = new Cleverbot;
 const isDev = ['ID1', 'ID2']; 
 const isStaff = ['ID1', 'ID2', 'ID3'];
