@@ -289,7 +289,7 @@ if (msg.content.startsWith(prefix + "kick")) {
 if (msg.content.startsWith(prefix + "invite")) {
 msg.channel.send([
            "Hello, I am " + bot.user.username + ". To invite me to your server please click this link. " +
-           "https://discordapp.com/oauth2/authorize?&client_id=237170497937342465&scope=bot&permissions=8"
+           "https://discordapp.com/oauth2/authorize?&client_id=BOT_ID&scope=bot&permissions=8"
 ])
 }
     //ID
